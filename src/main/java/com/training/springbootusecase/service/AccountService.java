@@ -20,7 +20,10 @@ import com.training.springbootusecase.repository.AccountRepository;
 import com.training.springbootusecase.repository.BeneficiaryConnectionsRepository;
 import com.training.springbootusecase.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AccountService {
 
 	@Autowired
@@ -36,8 +39,10 @@ public class AccountService {
 	public Account getAccountById(long accountId){
 		if(repository.existsById(accountId))
 			return repository.getById(accountId);
-		else
+		else{
+			log.info("Account doesn't exist");
 			throw new NoSuchAccountException("Account cannot be found");
+		}
 	}
 	public User getUserByEmail(String email){
 		return userRepository.findByEmail(email);
@@ -48,8 +53,10 @@ public class AccountService {
 		if(fromAccount.getBalance()>amount){
 			fromAccount.setBalance(fromAccount.getBalance()-amount);
 		}
-		else
+		else{
+			log.info("Insufficient Balance");
 			throw new NotSufficientFundException("You have low balance. You can't make this transaction");
+		}
 		long toAccountId = fromAccount.getConnections().getBeneficiaryPersonAccountId();
 		Account toAccount = getAccountById(toAccountId);
 		toAccount.setBalance(toAccount.getBalance()+amount);
@@ -100,11 +107,12 @@ public class AccountService {
 			return AccountInfoDto.builder()
 					.email(user.getEmail())
 					.balance(account.getBalance())
-					.beneficiaryPersonName(account.getConnections().getBeneficiaryUserName())
 					.userName(user.getName())
 					.build();
-		else
+		else{
+			log.info("Authentication failed");
 			throw new AuthenticationException("Password is wrong");
+		}
 	}
 	
 
