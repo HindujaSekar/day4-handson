@@ -15,6 +15,7 @@ import com.training.springbootusecase.dto.AccountInfoDto;
 import com.training.springbootusecase.dto.BeneficiaryDto;
 import com.training.springbootusecase.dto.CredentialDto;
 import com.training.springbootusecase.dto.RequestDto;
+import com.training.springbootusecase.entity.Account;
 import com.training.springbootusecase.entity.User;
 import com.training.springbootusecase.service.AccountService;
 
@@ -35,17 +36,18 @@ public class AccountController {
 		log.info("User with name" +user.getName()+"is registered");
 		return new ResponseEntity<>(dto,HttpStatus.OK);
 	}
-	@PostMapping("/{connection}")
+	@PostMapping("/{request}")
 	public ResponseEntity<BeneficiaryDto> addBeneficary(@RequestBody RequestDto request){
 		BeneficiaryDto dto = service.addBeneficiary(request);
 		log.info("Beneficiary account added for " + dto.getAccountId());
 		return new ResponseEntity<>(dto,HttpStatus.CREATED);
 	}
-	/*@DeleteMapping("/{id}")
-	public ResponseEntity<Account> removeBeneficiary(@PathVariable("id") long accountId){
-		Account account = service.removeBeneficiary(accountId);
+	@PutMapping("/{request}")
+	public ResponseEntity<Account> changeBeneficiary(@RequestBody RequestDto request){
+		Account account = service.changeBeneficiary(request);
+		log.info("Beneficiary changed");
 		return new ResponseEntity<>(account,HttpStatus.OK);
-	}*/
+	}
 	@PutMapping("/{id}/{amount}")
 	public ResponseEntity<String> fundTransfer(@PathVariable("id") long accountId,
 			@PathVariable("amount")double amount){

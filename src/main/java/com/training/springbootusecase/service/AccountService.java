@@ -17,7 +17,6 @@ import com.training.springbootusecase.exceptions.AuthenticationException;
 import com.training.springbootusecase.exceptions.NoSuchAccountException;
 import com.training.springbootusecase.exceptions.NotSufficientFundException;
 import com.training.springbootusecase.repository.AccountRepository;
-import com.training.springbootusecase.repository.BeneficiaryConnectionsRepository;
 import com.training.springbootusecase.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,6 @@ public class AccountService {
 	private AccountRepository repository;
 	@Autowired
 	private UserRepository userRepository;
-	@Autowired
-	private BeneficiaryConnectionsRepository connectionsRepository;
 	
 	public List<Account> getAllAccounts() {
 		return repository.findAll();
@@ -66,8 +63,6 @@ public class AccountService {
 	}
 	public BeneficiaryDto addBeneficiary(RequestDto dto){
 		Account account = getAccountById(dto.getAccountId());
-		if(account.equals(null))
-			throw new NoSuchAccountException("Account cannot be found");
 		BeneficiaryConnections connections= BeneficiaryConnections.builder()
 				.account(account)
 				.beneficiaryUserName(dto.getBeneficiaryUserName())
@@ -81,12 +76,16 @@ public class AccountService {
 				.beneficiaryId(connections.getBeneficiaryPersonAccountId())
 				.build();
 	}
-	/*public Account removeBeneficiary(long accountId){
-		Account account = getAccountById(accountId);
-		account.setConnections(null);
+	public Account changeBeneficiary(RequestDto dto){
+		Account account = getAccountById(dto.getAccountId());
+		account.setConnections(BeneficiaryConnections.builder()
+				.account(account)
+				.beneficiaryUserName(dto.getBeneficiaryUserName())
+				.beneficiaryPersonAccountId(dto.getBeneficiaryPersonAccountId())				
+				.build());
 		repository.save(account);
 		return account;
-	}*/
+	}
 	public CredentialDto addUser(User user, double balance){
 		Account account = Account.builder()
 				.user(user)
