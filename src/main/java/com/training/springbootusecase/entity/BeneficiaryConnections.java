@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class BeneficiaryConnections {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long beneficiaryId;
-	@OneToOne
+	@ManyToOne
 	@JoinColumn
 	private Account account;
 	private String beneficiaryUserName;

@@ -1,6 +1,8 @@
 package com.training.springbootusecase.entity;
 
 
+import java.time.LocalDate;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,19 +27,23 @@ public class Account {
 	private long accountId;
 	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
-	@OneToOne(cascade = CascadeType.ALL)
-	private BeneficiaryConnections connections; 
 	private double balance;
+	private LocalDate effectiveDate;
+	@OneToOne(cascade = CascadeType.ALL)
+	private TransactionHistory history;
 	public Account() {
 		super();
 	}
-	public Account(long accountId, User user, BeneficiaryConnections connections, double balance) {
+	public Account(long accountId, User user, double balance,
+			LocalDate effectiveDate, TransactionHistory history) {
 		super();
 		this.accountId = accountId;
 		this.user = user;
-		this.connections = connections;
 		this.balance = balance;
+		this.effectiveDate = effectiveDate;
+		this.history = history;
 	}
+	
 	
 
 }
